@@ -6,6 +6,9 @@ const port = 3000
 
 const Todo = require('./models/todo') //載入todo model
 
+//載入method-override
+const methOverride = require('method-override')
+
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' })) //建立一個名為'hbs'的樣板引擎, 並且傳入exphbs 與相關參數
 app.set('view engine', 'hbs') //啟用樣板引擎 hbs
 
@@ -27,10 +30,14 @@ db.once('open', () => {
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
 
+//設定每一筆請求都會通過method override進行前處理
+app.use(methOverride('_method'))
+
+
 app.get('/', (req, res) => {
   Todo.find() //取出Todo model 裡的所有資料
     .lean() //把Mongoose 的 model 物件轉換成乾淨的 JS 資料陣列
-    .sort({ _id: 'asc'}) //根據ID做正序(ascending)排列, 反序是'desc'(desscending)
+    .sort({ _id: 'asc' }) //根據ID做正序(ascending)排列, 反序是'desc'(desscending)
     .then(todos => res.render('index', { todos })) //將資料傳給 index 樣板, 這邊{todos}是{todos: todo}的縮寫
     .catch(error => console.error(error)) //錯誤處理
 })
@@ -63,10 +70,9 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
-  console.log(req.body)
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
@@ -77,7 +83,7 @@ app.post('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
