@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const exphbs = require('express-handlebars') //引用express-handlebars 並且命名為"exphbs"
 const bodyParser = require('body-parser')
-const port = 3000
+const PORT = process.env.PORT || 3000
 
 const Todo = require('./models/todo') //載入todo model
 
@@ -27,6 +27,6 @@ app.use(methOverride('_method'))
 // 將 request 導入路由器
 app.use(routes)
 
-app.listen(port, () => {
-  console.log(`Express is listen on localhost${port} `)
+app.listen(PORT, () => {
+  console.log(`Express is listen on localhost${PORT} `)
 })
