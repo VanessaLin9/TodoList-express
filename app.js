@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const exphbs = require('express-handlebars') //引用express-handlebars 並且命名為"exphbs"
 const bodyParser = require('body-parser')
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000 //改由heroku指定路由
 
 const Todo = require('./models/todo') //載入todo model
 
