@@ -1,4 +1,5 @@
 const express = require('express')
+const session = require('express-session')
 const app = express()
 const exphbs = require('express-handlebars') //引用express-handlebars 並且命名為"exphbs"
 const bodyParser = require('body-parser')
@@ -17,6 +18,11 @@ app.set('view engine', 'hbs') //啟用樣板引擎 hbs
 
 require('./config/mongoose')
 
+app.use(session({
+  secret: 'ThisIsMySecret',
+  resave: false, //當設定為 true 時，會在每一次與使用者互動後，強制把 session 更新到 session store 裡。
+  saveUninitialized: true //強制將未初始化的 session 存回 session store。未初始化表示這個 session 是新的而且沒有被修改過，例如未登入的使用者的 session。
+}))
 
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
