@@ -1,14 +1,19 @@
 const express = require('express')
 const session = require('express-session')
+const usePassport = require('./config/passport') // 載入設定檔，要寫在 express-session 以後
 const app = express()
 const exphbs = require('express-handlebars') //引用express-handlebars 並且命名為"exphbs"
 const bodyParser = require('body-parser')
+
+
 const PORT = process.env.PORT || 3000 //改由heroku指定路由
 
 const Todo = require('./models/todo') //載入todo model
 
 //載入method-override
 const methOverride = require('method-override')
+
+usePassport(app) // 呼叫 Passport 函式並傳入 app，這條要寫在路由之前
 
 // 引用路由器
 const routes = require('./routes')
@@ -17,6 +22,7 @@ app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' })) //建立�
 app.set('view engine', 'hbs') //啟用樣板引擎 hbs
 
 require('./config/mongoose')
+
 
 app.use(session({
   secret: 'ThisIsMySecret',
