@@ -8,6 +8,12 @@ const todoSchema = new Schema ({
   isDone: {
     type: Boolean,
     default: false
+  },
+  userId: {  // 加入關聯設定
+    type: Schema.Types.ObjectId,
+    ref: 'User', //定義參考對象是 User model
+    index: true, //使用索引來查詢資料能夠增加讀取效能
+    required: true //必填，確保每一筆 todo 紀錄都一定會對應到某個 user
   }
 })
 module.exports = mongoose.model('Todo', todoSchema)
