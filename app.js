@@ -3,6 +3,7 @@ const session = require('express-session')
 const exphbs = require('express-handlebars') //引用express-handlebars 並且命名為"exphbs"
 const bodyParser = require('body-parser')
 const methOverride = require('method-override') //載入method-override
+const flash = require('connect-flash')
 
 const routes = require('./routes')
 
@@ -27,11 +28,14 @@ app.use(methOverride('_method'))
 
 
 usePassport(app) // 呼叫 Passport 函式並傳入 app，這條要寫在路由之前
+app.use(flash())
 
 app.use((req, res, next) => {
   console.log(req.user)// 你可以在這裡 console.log(req.user) 等資訊來觀察
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg')  // 設定 success_msg 訊息
+  res.locals.warning_msg = req.flash('warning_msg')  // 設定 warning_msg 訊息
   next()
 })
 
