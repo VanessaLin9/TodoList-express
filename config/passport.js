@@ -5,7 +5,7 @@ const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/user')
 
 module.exports = app => {
-  
+
   // 初始化 Passport 模組
   app.use(passport.initialize())
   app.use(passport.session())
